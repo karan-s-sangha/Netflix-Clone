@@ -1,18 +1,24 @@
+// Import the Express framework to create and manage routes.
 import express from "express";
-import { getTrendingTv } from "../controllers/tv.controller.js"
-import { getTvTrailers } from "../controllers/tv.controller.js"
-import { getTvDetails } from "../controllers/tv.controller.js"
-import { getSimilarTvs } from "../controllers/tv.controller.js"
-import { getTvsByCategory } from "../controllers/tv.controller.js"
 
+// Import controller functions to handle the business logic for TV-related operations.
+import { 
+    getTrendingTv,       
+    getTvTrailers,       
+    getTvDetails,        
+    getSimilarTvs,       
+    getTvsByCategory     
+} from "../controllers/tv.controller.js"; 
 
+// Create an Express router instance to define routes.
 const router = express.Router();
 
-router.get("/trending", getTrendingTv)
-router.get("/:id/trailers", getTvTrailers)
-router.get("/:id/details", getTvDetails)
-router.get("/:id/similar", getSimilarTvs)
-router.get("/:category", getTvsByCategory)
+// Define a route for fetching trending TV shows.
+router.get("/trending", getTrendingTv);
+router.get("/:id/trailers", getTvTrailers);
+router.get("/:id/details", getTvDetails);
+router.get("/:id/similar", getSimilarTvs);
+router.get("/:category", getTvsByCategory);
 
-
+// Export the router so it can be mounted in the main application file.
 export default router;
