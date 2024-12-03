@@ -1,52 +1,63 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Import Tailwind's core utilities */
+@tailwind base; /* Includes Tailwind's base styles for normalization */
+@tailwind components; /* Provides pre-designed components from Tailwind */
+@tailwind utilities; /* Includes all utility classes for styling */
 
+/* Custom background styling for the hero section */
 .hero-bg {
-	background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url("/hero.png");
+    /* Adds a gradient overlay on the hero image */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url("/hero.png");
+    /* Ensures that the background image is well-suited for text readability */
 }
 
+/* Shimmer effect for loading placeholders */
 .shimmer {
-	animation: shimmer 2s infinite linear;
-	background: linear-gradient(to right, #2c2c2c 4%, #333 25%, #2c2c2c 36%);
-	background-size: 1000px 100%;
+    /* Applies a shimmer animation to the element */
+    animation: shimmer 2s infinite linear;
+    /* Creates a moving gradient effect to simulate loading */
+    background: linear-gradient(to right, #2c2c2c 4%, #333 25%, #2c2c2c 36%);
+    background-size: 1000px 100%; /* Ensures the gradient spans the container */
 }
 
+/* Defines the shimmer animation */
 @keyframes shimmer {
-	0% {
-		background-position: -1000px 0;
-	}
-	100% {
-		background-position: 1000px 0;
-	}
+    0% {
+        background-position: -1000px 0; /* Starts the gradient off-screen on the left */
+    }
+    100% {
+        background-position: 1000px 0; /* Moves the gradient off-screen to the right */
+    }
 }
 
+/* Error page radial gradient overlay */
 .error-page--content::before {
-	background: radial-gradient(
-		ellipse at center,
-		rgba(0, 0, 0, 0.5) 0,
-		rgba(0, 0, 0, 0.2) 45%,
-		rgba(0, 0, 0, 0.1) 55%,
-		transparent 70%
-	);
-	bottom: -10vw;
-	content: "";
-	left: 10vw;
-	position: absolute;
-	right: 10vw;
-	top: -10vw;
-	z-index: -1;
+    /* Creates a radial gradient effect for the error page */
+    background: radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0.5) 0, /* Dark center */
+        rgba(0, 0, 0, 0.2) 45%, /* Gradual fade */
+        rgba(0, 0, 0, 0.1) 55%, /* Lighter fade */
+        transparent 70% /* Transparent at the edges */
+    );
+    content: ""; /* Required for pseudo-elements */
+    position: absolute; /* Ensures the overlay is positioned absolutely */
+    top: -10vw; /* Expands the gradient beyond the container */
+    bottom: -10vw;
+    left: 10vw;
+    right: 10vw;
+    z-index: -1; /* Places the gradient behind other content */
 }
 
+/* Custom scrollbar styling for WebKit-based browsers */
 ::-webkit-scrollbar {
-	width: 8px;
+    width: 8px; /* Sets the width of the scrollbar */
 }
 
 ::-webkit-scrollbar-thumb {
-	background-color: #4b5563;
-	border-radius: 6px;
+    background-color: #4b5563; /* Colors the draggable part of the scrollbar */
+    border-radius: 6px; /* Rounds the edges for a polished look */
 }
 
 ::-webkit-scrollbar-track {
-	background-color: #1a202c;
+    background-color: #1a202c; /* Colors the background of the scrollbar */
 }
