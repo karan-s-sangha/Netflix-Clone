@@ -3,11 +3,19 @@
 @tailwind components; /* Provides pre-designed components from Tailwind */
 @tailwind utilities; /* Includes all utility classes for styling */
 
-/* Custom background styling for the hero section */
 .hero-bg {
-    /* Adds a gradient overlay on the hero image */
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url("/hero.png");
-    /* Ensures that the background image is well-suited for text readability */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/hero.png");
+    background-size: cover; /* Ensures the image covers the entire viewport */
+
+    background-position: top left; /* Focuses on the top-center part of the image */
+    background-repeat: no-repeat; /* Prevents tiling of the image */
+}
+
+@media (max-width: 768px) {
+    .hero-bg {
+        background-size: cover; /* Adjust to fully cover smaller screens */
+        background-position: top; /* Adjust focus for smaller screens */
+    }
 }
 
 /* Shimmer effect for loading placeholders */
@@ -48,16 +56,15 @@
     z-index: -1; /* Places the gradient behind other content */
 }
 
-/* Custom scrollbar styling for WebKit-based browsers */
-::-webkit-scrollbar {
-    width: 8px; /* Sets the width of the scrollbar */
+.fade-in {
+    animation: fadeIn 2s ease-in-out;
 }
 
-::-webkit-scrollbar-thumb {
-    background-color: #4b5563; /* Colors the draggable part of the scrollbar */
-    border-radius: 6px; /* Rounds the edges for a polished look */
-}
-
-::-webkit-scrollbar-track {
-    background-color: #1a202c; /* Colors the background of the scrollbar */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

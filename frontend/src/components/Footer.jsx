@@ -40,7 +40,7 @@ const Footer = () => {
 						target="_blank"
 						className="font-medium underline underline-offset-4"
 					>
-						you
+						karan
 					</a>
 					. The source code is available on{" "}
 					<a

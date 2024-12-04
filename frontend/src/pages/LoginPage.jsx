@@ -6,6 +6,8 @@ const LoginPage = () => {
 	// Local state for managing email and password inputs.
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [showInfo, setShowInfo] = useState(false);
+	
 
 	// Access the login function and isLoggingIn state from the authentication store.
 	const { login, isLoggingIn } = useAuthStore();
@@ -26,9 +28,9 @@ const LoginPage = () => {
 			*/}
 
 			{/* Header */}
-			<header className="max-w-6xl mx-auto flex items-center justify-between p-4">
+			<header className="max-w-7xl mx-auto flex items-center justify-between p-5">
 				<Link to={"/"}>
-					<img src="/netflix-logo.png" alt="logo" className="w-52" />
+					<img src="/netflix-logo.png" alt="logo" className="w-40 ml-9" />
 					{/* Netflix logo */}
 					{/* Tailwind CSS Classes:
 						- `w-52`: Sets the width to 13rem (208px).
@@ -38,7 +40,7 @@ const LoginPage = () => {
 
 			{/* Login Form Container */}
 			<div className="flex justify-center items-center mt-20 mx-3">
-				<div className="w-full max-w-md p-8 space-y-6 bg-black/60 rounded-lg shadow-md">
+				<div className="w-full max-w-md px-16 py-8 space-y-6 bg-black/70 rounded-lg shadow-md">
 					{/* Form Card */}
 					{/* Tailwind CSS Classes:
 						- `w-full`: Sets the width to 100% of the container.
@@ -50,7 +52,7 @@ const LoginPage = () => {
 						- `shadow-md`: Adds a medium shadow for a raised appearance.
 					*/}
 
-					<h1 className="text-center text-white text-2xl font-bold mb-4">Login</h1>
+					<h1 className="text-left text-white text-3xl font-bold mb-4">Sign In</h1>
 					{/* Form Title */}
 					{/* Tailwind CSS Classes:
 						- `text-center`: Centers the text horizontally.
@@ -67,13 +69,10 @@ const LoginPage = () => {
 						*/}
 
 						<div>
-							<label htmlFor="email" className="text-sm font-medium text-gray-300 block">
-								Email
-							</label>
 							<input
 								type="email"
-								className="w-full px-3 py-2 mt-1 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring"
-								placeholder="you@example.com"
+								className="w-full h-14 px-3 py-2 mt-1 border border-[#808080] rounded-md bg-transparent text-white focus:outline-none focus:ring"
+								placeholder="Email"
 								id="email"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
@@ -82,13 +81,10 @@ const LoginPage = () => {
 						</div>
 
 						<div>
-							<label htmlFor="password" className="text-sm font-medium text-gray-300 block">
-								Password
-							</label>
 							<input
 								type="password"
-								className="w-full px-3 py-2 mt-1 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring"
-								placeholder="••••••••"
+								className="w-full h-14 px-3 py-2 mt-1 border border-[#808080] rounded-md bg-transparent text-white focus:outline-none focus:ring"
+								placeholder="Password"
 								id="password"
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
@@ -110,22 +106,58 @@ const LoginPage = () => {
 								- `rounded-md`: Adds medium rounded corners (4px radius).
 								- `hover:bg-red-700`: Changes the background color on hover.
 							*/}
-							{isLoggingIn ? "Loading..." : "Login"}
+							{isLoggingIn ? "Loading..." : "Sign In"}
 							{/* Show "Loading..." while the login process is in progress. */}
 						</button>
 					</form>
 
-					<div className="text-center text-gray-400">
-						{/* Link to Signup Page */}
-						{/* Tailwind CSS Classes:
-							- `text-center`: Centers the text.
-							- `text-gray-400`: Sets the text color to light gray.
-						*/}
-						Don't have an account?{" "}
-						<Link to={"/signup"} className="text-red-500 hover:underline">
-							Sign Up
+					<div className="text-left text-gray-400">
+						New to Netflix?&nbsp; 
+						<Link to={"/signup"} className="text-white font-bold hover:underline">
+							Sign up now.
 						</Link>
-						{/* Link to the signup page */}
+					</div>
+
+					<div className="text-left text-sm text-gray-400">
+						<p className="inline">
+							This page is not protected by Google reCAPTCHA to ensure you're not a bot.&nbsp;
+						</p>
+						{!showInfo && (
+							<button
+								onClick={() => setShowInfo(true)}
+								aria-expanded={showInfo}
+								className="text-blue-500 hover:underline"
+							>
+								Learn more.
+							</button>
+						)}
+						<br />
+						<br />
+						<p
+							className={`transition-opacity duration-1000 ease-in-out ${
+								showInfo ? "visible opacity-100" : "invisible opacity-0"
+							}`}
+						>
+							The information collected by Google reCAPTCHA is subject to the&nbsp;
+							<a
+								href="https://policies.google.com/privacy"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="text-blue-500 hover:underline"
+							>
+								Privacy Policy
+							</a>
+							&nbsp;and&nbsp;
+							<a
+								href="https://policies.google.com/terms"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="text-blue-500 hover:underline"
+							>
+								Terms of Service
+							</a>
+							, and is used for providing, maintaining, and improving the reCAPTCHA service and for general security purposes (it is not used for personalized advertising by Google).
+						</p>
 					</div>
 				</div>
 			</div>
