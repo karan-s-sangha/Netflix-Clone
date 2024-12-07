@@ -25,29 +25,44 @@ const AuthScreen = () => {
   };
 
   const [selectedLanguage, setSelectedLanguage] = useState("English"); // Default language
-  const [isOpen, setIsOpen] = useState(false); // Controls dropdown visibility
   const options = ["English", "Español"]; // Dropdown options
-  const dropdownRef = useRef(null); // Reference for the dropdown container
-
-  const toggleDropdown = () => setIsOpen((prev) => !prev); // Toggle visibility
+  const [isOpen1, setIsOpen1] = useState(false); // State for the top dropdown
+const [isOpen2, setIsOpen2] = useState(false); // State for the bottom dropdown
+  const dropdownRef1 = useRef(null); // Ref for the top dropdown
+  const dropdownRef2 = useRef(null); // Ref for the bottom dropdown
+  
+  const toggleDropdown1 = () => setIsOpen1((prev) => !prev); // Top dropdown toggle
+  const toggleDropdown2 = () => setIsOpen2((prev) => !prev); // Bottom dropdown toggle
+  
+  const handleClickOutside = (event) => {
+    // Close the top dropdown if clicked outside
+    if (dropdownRef1.current && !dropdownRef1.current.contains(event.target)) {
+      setIsOpen1(false);
+    }
+    // Close the bottom dropdown if clicked outside
+    if (dropdownRef2.current && !dropdownRef2.current.contains(event.target)) {
+      setIsOpen2(false);
+    }
+  };
   const selectLanguage = (language) => {
     setSelectedLanguage(language); // Update selected language
-    setIsOpen(false); // Close dropdown
+    setIsOpen1(false); // Close dropdown
+    setIsOpen2(false);
   };
 
-    // Close the dropdown when clicking outside
-    useEffect(() => {
-      const handleClickOutside = (event) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-          setIsOpen(false);
-        }
-      };
+    // // Close the dropdown when clicking outside
+    // useEffect(() => {
+    //   const handleClickOutside = (event) => {
+    //     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    //       setIsOpen(false);
+    //     }
+    //   };
   
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, []);
+    //   document.addEventListener("mousedown", handleClickOutside);
+    //   return () => {
+    //     document.removeEventListener("mousedown", handleClickOutside);
+    //   };
+    // }, []);
 
     const features = [
       {
@@ -125,19 +140,19 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
 
 
 
-          <div ref={dropdownRef} className="relative inline-block text-left">
+          <div ref={dropdownRef1} className="relative inline-block text-left">
             <button
               className={`text-white text-base border py-1 px-3 rounded-md ${
-                isOpen ? "border-2" : "border"
+                isOpen1 ? "border-2" : "border"
               }`}
               aria-haspopup="true"
-              aria-expanded={isOpen}
-              onClick={toggleDropdown}
+              aria-expanded={isOpen1}
+              onClick={toggleDropdown1}
             >
               {`本A ` + selectedLanguage}
               <span className="ml-2 text-xs">▼</span>
             </button>
-            {isOpen && (
+            {isOpen1 && (
               <div className="absolute left-1/2 transform -translate-x-1/2 flex-col justify-center w-[95%] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">              
                   {options.map((option) => (
                   <div
@@ -336,22 +351,22 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
 
       {/* Language Changer */}
       <div className="w-full p-5 pb-10 bg-black">
-        <div className="relative ml-36 inline-block">
+        <div ref={dropdownRef2} className="relative ml-36 inline-block">
           {/* Dropdown Button */}
           <button
             className={`text-white text-base border py-1 px-3 rounded-md transition-all duration-300 ${
-              isOpen ? "border-2 border-blue-500" : "border-gray-500"
+              isOpen2 ? "border-2 border-blue-500" : "border-gray-500"
             }`}
             aria-haspopup="true"
-            aria-expanded={isOpen}
-            onClick={toggleDropdown}
+            aria-expanded={isOpen2}
+            onClick={toggleDropdown2}
           >
             {`本A ` + selectedLanguage}
             <span className="ml-2 text-xs">▼</span>
           </button>
 
           {/* Dropdown Menu */}
-          {isOpen && (
+          {isOpen2 && (
             <div className="absolute left-1/2 transform -translate-x-1/2 flex-col justify-center w-[95%] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">              
               {options.map((option) => (
                 <div
@@ -371,80 +386,3 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
 };
 
 export default AuthScreen; // Export the component for use in other parts of the app
-
-// General Layout and Spacing
-// max-w-6xl: Sets the maximum width of the element to 6xl (1024px).
-// mx-auto: Centers the element horizontally within its parent.
-// p-4: Adds padding of 1rem (16px) on all sides.
-// pb-10: Adds padding of 2.5rem (40px) to the bottom.
-// py-40: Adds padding of 10rem (160px) to the top and bottom.
-// py-10: Adds padding of 2.5rem (40px) to the top and bottom.
-// px-4: Adds padding of 1rem (16px) to the left and right.
-// gap-4: Adds a gap of 1rem (16px) between flex children.
-
-// Flexbox Layout
-// flex: Enables Flexbox layout for the container.
-// flex-col: Stacks the children vertically in a column.
-// md:flex-row: Switches the layout to horizontal row on medium screens and larger (768px+).
-// flex-col-reverse: Stacks the children vertically, but reverses their order.
-// items-center: Vertically aligns all children to the center of the container.
-// justify-center: Horizontally centers all children within the container.
-// flex-1: Makes the element grow to take up the remaining space within the Flexbox.
-
-// Text and Font
-// text-center: Centers the text horizontally within the element.
-// text-white: Sets the text color to white.
-// text-4xl: Sets the font size to 2.25rem (36px).
-// md:text-5xl: Increases the font size to 3rem (48px) on medium screens and larger.
-// text-lg: Sets the font size to 1.125rem (18px).
-// lg:text-2xl: Increases the font size to 1.5rem (24px) on large screens.
-// font-bold: Makes the text bold.
-// font-extrabold: Makes the text extra bold.
-// text-sm: Sets the font size to 0.875rem (14px).
-
-// Background Colors
-// bg-black: Sets the background color to black.
-// bg-black/80: Sets a black background with 80% opacity.
-// bg-red-600: Sets the background color to a vibrant red.
-// bg-[#232323]: Sets the background color to a custom dark gray (#232323).
-
-// Borders
-// border: Adds a thin border to the element.
-// border-gray-700: Sets the border color to a dark gray shade.
-// border-slate-500: Sets the border color to a medium gray slate color.
-// rounded: Adds a small border-radius for rounded corners.
-
-// Positioning
-// relative: Positions the element relative to its normal flow in the document.
-// absolute: Positions the element relative to its nearest positioned ancestor.
-// top-1/2: Moves the element down by 50% of its parent's height.
-// left-1/2: Moves the element right by 50% of its parent's width.
-// -translate-x-1/2: Offsets the element left by half its width (for centering).
-// -translate-y-1/2: Offsets the element up by half its height (for centering).
-// z-10: Places the element above other elements with a lower z-index.
-// z-20: Places the element above elements with a z-index of 10 or lower.
-
-// Width and Height
-// w-32: Sets the width of the element to 8rem (128px).
-// md:w-52: Increases the width to 13rem (208px) on medium screens and larger.
-// w-1/2: Sets the width to 50% of the parent's width.
-// w-full: Sets the width to 100% of the parent's width.
-// h-2: Sets the height to 2px.
-// h-24: Sets the height to 6rem (96px).
-// h-1/2: Sets the height to 50% of the parent's height.
-// h-4/6: Sets the height to two-thirds (66.67%) of the parent's height.
-
-// Icons and Images
-// size-8: Sets the size of the icon to 2rem (32px).
-// mt-4: Adds a top margin of 1rem (16px) to the image.
-
-// Responsiveness
-// md:: Applies styles for medium screens and larger (768px+).
-// lg:: Applies styles for large screens and larger (1024px+).
-
-// Utility
-// aria-hidden="true": Marks decorative elements (like separators) as hidden from screen readers.
-// playsInline: Ensures the video plays inline (not in full screen) on mobile devices.
-// autoPlay: Starts playing the video automatically when the page loads.
-// muted: Mutes the audio for the video by default.
-// loop: Makes the video loop continuously.
