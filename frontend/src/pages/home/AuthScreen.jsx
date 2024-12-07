@@ -336,7 +336,7 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
 
       {/* Language Changer */}
       <div className="w-full p-5 pb-10 bg-black">
-        <div ref={dropdownRef} className="relative ml-36 inline-block">
+        <div className="relative ml-36 inline-block">
           {/* Dropdown Button */}
           <button
             className={`text-white text-base border py-1 px-3 rounded-md transition-all duration-300 ${
