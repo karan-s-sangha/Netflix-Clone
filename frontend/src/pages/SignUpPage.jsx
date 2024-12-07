@@ -23,7 +23,7 @@ const SignUpPage = () => {
 	};
 
 	return (
-		<div className="h-screen w-full hero-bg">
+		<div className="bg-black/50 bg-blend-overlay bg-[url('/hero.jpg')] bg-left-top bg-no-repeat bg-cover h-screen md:bg-top">
 		{/* Header */}
 		<header className="max-w-7xl mx-auto flex items-center justify-between p-5">
 				<Link to={"/"}>

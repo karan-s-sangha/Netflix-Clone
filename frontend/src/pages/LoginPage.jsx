@@ -19,7 +19,7 @@ const LoginPage = () => {
 	};
 
 	return (
-		<div className="h-screen w-full hero-bg">
+		<div className="bg-black/50 bg-blend-overlay bg-[url('/hero.jpg')] bg-left-top bg-no-repeat bg-cover h-screen md:bg-top">
 			{/* Page container */}
 			{/* Tailwind CSS Classes:
 				- `h-screen`: Sets the height to the full viewport height.
