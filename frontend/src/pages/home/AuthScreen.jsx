@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import Link for navigation and useNavigate for programmatic routing
-import { ChevronRight } from "lucide-react"; // Import ChevronRight icon for UI enhancements
+import { ChevronLeft, ChevronRight } from "lucide-react"; // Icon library
 
 /**
  * AuthScreen Component
@@ -125,6 +125,33 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
       setActiveIndex(activeIndex === index ? null : index); // Toggle active item
     };
 
+    {/*---------------------------------------------------------------------------------------- */}
+    
+    const movies = [
+      { id: 1, title: "The Merry Gentlemen", image: "/merry_gentlemen.png" },
+      { id: 2, title: "Hot Frosty", image: "/hot_frosty.png" },
+      { id: 3, title: "Bob Peace", image: "/bob_peace.png" },
+      { id: 4, title: "Buy Now!", image: "/buy_now.png" },
+      { id: 5, title: "The Lost Children", image: "/lost_children.png" },
+      { id: 6, title: "Another Movie", image: "/another_movie.png" },
+    ];
+  
+    const [selectedMovie, setSelectedMovie] = useState(null); // State for the selected movie
+    const sliderRef = useRef(null);
+  
+    const scrollLeft = () => {
+      if (sliderRef.current) {
+        sliderRef.current.scrollBy({ left: -sliderRef.current.offsetWidth, behavior: "smooth" });
+      }
+    };
+  
+    const scrollRight = () => {
+      if (sliderRef.current) {
+        sliderRef.current.scrollBy({ left: sliderRef.current.offsetWidth, behavior: "smooth" });
+      }
+    };
+    
+    {/*---------------------------------------------------------------------------------------- */}
 
   return (
     <div>
@@ -248,8 +275,102 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
         </div>
       </div>
 
+      {/*---------------------------------------------------------------------------------------- */}
+      
+      {/* The movies to watch on Netflix */}
+      <div className="bg-black text-white p-6 px-12 md:px-48 py-16 relative">
+        <h2 className="text-3xl font-bold mb-6">Trending Now</h2>
+
+        {/* Wrapper for Carousel and Buttons */}
+        <div className="flex items-center relative h-56 bg-black">
+          {/* Left Arrow */}
+          <button
+            className="absolute top-1/2 transform -translate-y-1/2 -left-14 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 z-10"
+            onClick={scrollLeft}
+          >
+            <ChevronLeft size={32} />
+          </button>
+
+          {/* Carousel Container */}
+          <div className="relative overflow-hidden w-full" ref={sliderRef}>
+            {/* Movie Items */}
+            <div className="flex transition-transform duration-700 gap-x-10">
+              {movies.map((movie) => (
+                <div
+                  key={movie.id}
+                  className="flex-shrink-0 flex flex-col items-center relative h-56 group"
+                >
+                  {/* Movie Image */}
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setSelectedMovie(movie); // Set the selected movie for modal
+                    }}
+                    className="block"
+                  >
+                    <img
+                      src={movie.image}
+                      alt={movie.title}
+                      className="w-full h-auto mb-4 object-cover rounded-lg transition-transform duration-300 transform group-hover:scale-110"
+                    />
+                  </a>
+
+                  {/* Number Overlay */}
+                  <span
+                    className="absolute bottom-2 -left-6 text-black font-bold text-8xl w-16 h-auto flex items-center justify-center"
+                    style={{
+                      WebkitTextStroke: "2px white",
+                    }}
+                  >
+                    {movie.id}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Arrow */}
+          <button
+            className="absolute top-1/2 transform -translate-y-1/2 -right-14 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 z-10"
+            onClick={scrollRight}
+          >
+            <ChevronRight size={32} />
+          </button>
+        </div>
+
+        {/* Modal for Larger Image */}
+        {selectedMovie && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-20"
+            onClick={() => setSelectedMovie(null)} // Close modal on background click
+          >
+            <div
+              className="bg-white p-4 rounded-lg relative"
+              onClick={(e) => e.stopPropagation()} // Prevent click propagation to background
+            >
+              <button
+                className="absolute top-2 right-2 text-black font-bold"
+                onClick={() => setSelectedMovie(null)} // Close button
+              >
+                ✕
+              </button>
+              <img
+                src={selectedMovie.image}
+                alt={selectedMovie.title}
+                className="w-[90vw] max-w-3xl h-auto rounded-lg"
+              />
+              <h3 className="text-black text-xl font-semibold text-center mt-4">
+                {selectedMovie.title}
+              </h3>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/*---------------------------------------------------------------------------------------- */}
+      
+      {/*Grid for More Reasons to Join */}
       <div className="bg-black content-center flex justify-center">
         <div className="bg-black text-white py-10 w-[80%]">
           <h2 className="text-2xl font-bold text-left mb-4">More Reasons to Join</h2>
@@ -301,8 +422,8 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
 
               {/* Answer */}
               <div
-                className={`bg-[#2d2d2d] transition-[max-height] duration-500 ease-in-out overflow-hidden ${
-                  activeIndex === index ? "max-h-screen" : "max-h-0"
+                className={`bg-[#2d2d2d] transition-[max-height] duration-700 ease-in-out overflow-hidden ${
+                  activeIndex === index ? "max-h-96" : "max-h-0"
                 }`}
               >
                 <div className={`p-4 text-gray-300`}>
@@ -317,6 +438,7 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
           ))}
         </div>
       </div>
+
 
 
       {/*---------------------------------------------------------------------------------------- */}
