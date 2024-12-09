@@ -24,10 +24,14 @@ const AuthScreen = () => {
     navigate("/signup?email=" + email); // Redirect to the signup page with the email in the query string
   };
 
+  {/*---------------------------------------------------------------------------------------- */}
+
+  {/*For the Language Selection */}
+
   const [selectedLanguage, setSelectedLanguage] = useState("English"); // Default language
   const options = ["English", "Español"]; // Dropdown options
   const [isOpen1, setIsOpen1] = useState(false); // State for the top dropdown
-const [isOpen2, setIsOpen2] = useState(false); // State for the bottom dropdown
+  const [isOpen2, setIsOpen2] = useState(false); // State for the bottom dropdown
   const dropdownRef1 = useRef(null); // Ref for the top dropdown
   const dropdownRef2 = useRef(null); // Ref for the bottom dropdown
   
@@ -44,25 +48,32 @@ const [isOpen2, setIsOpen2] = useState(false); // State for the bottom dropdown
       setIsOpen2(false);
     }
   };
+  const handleScroll = () => {
+    // Close dropdown on scroll
+    setIsOpen1(false);
+    setIsOpen2(false);
+  };
+
+
   const selectLanguage = (language) => {
     setSelectedLanguage(language); // Update selected language
     setIsOpen1(false); // Close dropdown
     setIsOpen2(false);
   };
 
-    // // Close the dropdown when clicking outside
-    // useEffect(() => {
-    //   const handleClickOutside = (event) => {
-    //     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-    //       setIsOpen(false);
-    //     }
-    //   };
-  
-    //   document.addEventListener("mousedown", handleClickOutside);
-    //   return () => {
-    //     document.removeEventListener("mousedown", handleClickOutside);
-    //   };
-    // }, []);
+  useEffect(() => {
+    // Add event listeners for click outside and scroll
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("scroll", handleScroll, true);
+
+    // Cleanup listeners on component unmount
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("scroll", handleScroll, true);
+    };
+  }, []); // Run only on mount and unmount
+
+    {/*---------------------------------------------------------------------------------------- */}
 
     const features = [
       {
@@ -86,6 +97,8 @@ const [isOpen2, setIsOpen2] = useState(false); // State for the bottom dropdown
         icon: '/kids_profile.png', // Replace with your actual image/icon
       },
     ];
+
+    {/*---------------------------------------------------------------------------------------- */}
 
     //For the FAQ
     const [activeIndex, setActiveIndex] = useState(null);
@@ -135,8 +148,7 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
       { id: 5, title: "The Lost Children", image: "/lost_children.png" },
       { id: 6, title: "Another Movie", image: "/another_movie.png" },
     ];
-  
-    const [selectedMovie, setSelectedMovie] = useState(null); // State for the selected movie
+    
     const sliderRef = useRef(null);
   
     const scrollLeft = () => {
@@ -151,7 +163,80 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
       }
     };
     
-    {/*---------------------------------------------------------------------------------------- */}
+    // Your state and logic for the modal and selected movie
+    const [selectedMovie, setSelectedMovie] = useState(null);
+
+    // UseEffect to handle scroll lock
+    useEffect(() => {
+      if (selectedMovie) {
+        // Lock scrolling when the modal is open
+        document.body.classList.add("overflow-hidden");
+      } else {
+        // Unlock scrolling when the modal is closed
+        document.body.classList.remove("overflow-hidden");
+      }
+
+      // Cleanup function to ensure no side effects
+      return () => {
+        document.body.classList.remove("overflow-hidden");
+      };
+    }, [selectedMovie]); // Dependency on selectedMovie
+
+    {/*----------------------------------------------------------------------------------------*/}
+    
+    {/*For the Region and Content Type Selection */}
+
+    const [selectedRegion, setSelectedRegion] = useState("United States"); // Default Region
+    const [selectedContent, setSelectedContent] = useState("Movies"); // Default language
+    const optionsRegion = ["United States", "Global"]; // Dropdown options
+    const optionsContent = ["Movies", "TV Shows"]; // Dropdown options
+    const [isOpenRegion, setIsOpenRegion] = useState(false); // State for the top dropdown
+    const [isOpenContent, setIsOpenContent] = useState(false); // State for the bottom dropdown
+    const dropdownRefRegion = useRef(null); // Ref for the top dropdown
+    const dropdownRefContent = useRef(null); // Ref for the bottom dropdown
+    
+    const toggleDropdownRegion = () => setIsOpenRegion((prev) => !prev); // Top dropdown toggle
+    const toggleDropdownContent = () => setIsOpenContent((prev) => !prev); // Bottom dropdown toggle
+    
+    const handleClickOutside_Region_Content = (event) => {
+      // Close the top dropdown if clicked outside
+      if (dropdownRefRegion.current && !dropdownRefRegion.current.contains(event.target)) {
+        setIsOpenRegion(false);
+      }
+      // Close the bottom dropdown if clicked outside
+      if (dropdownRefContent.current && !dropdownRefContent.current.contains(event.target)) {
+        setIsOpenContent(false);
+      }
+    };
+    const handleScroll_Region_Content = () => {
+      // Close dropdown on scroll
+      setIsOpenRegion(false);
+      setIsOpenContent(false);
+    };
+
+
+    const select_Region = (Region) => {
+      setSelectedRegion(Region); // Update selected Region
+      setIsOpenRegion(false); // Close dropdown
+    };
+    const select_Content = (Content) => {
+      setSelectedContent(Content); // Update selected Region
+      setIsOpenContent(false); // Close dropdown
+    };
+
+    useEffect(() => {
+      // Add event listeners for click outside and scroll
+      document.addEventListener("mousedown", handleClickOutside_Region_Content);
+      document.addEventListener("scroll", handleScroll_Region_Content, true);
+
+      // Cleanup listeners on component unmount
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside_Region_Content);
+        document.removeEventListener("scroll", handleScroll_Region_Content, true);
+      };
+    }, []); // Run only on mount and unmount
+
+  {/*---------------------------------------------------------------------------------------- */}
 
   return (
     <div>
@@ -281,6 +366,67 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
       <div className="bg-black text-white p-6 px-12 md:px-48 py-16 relative">
         <h2 className="text-3xl font-bold mb-6">Trending Now</h2>
 
+        {/* Optimized Dropdown for Region and Content Type Selection */}
+        <div className="w-full bg-[black] flex items-center space-x-6 pb-5">
+          {/* Region Dropdown */}
+          <div ref={dropdownRefRegion} className="relative inline-block z-20 items-center ">
+            <button
+              className={`text-white text-xl border border-gray-500 py-1 px-3 rounded-md bg-[#161616] min-w-44 ${
+                isOpenRegion ? "outline outline-2 outline-white" : "outline-none"
+              }`}
+              aria-haspopup="true"
+              aria-expanded={isOpenRegion}
+              onClick={toggleDropdownRegion}
+            >
+              {selectedRegion}
+              <span className="ml-2 text-xs">▼</span>
+            </button>
+
+            {isOpenRegion && (
+              <div className="absolute left-1/2 transform -translate-x-1/2 flex-col w-[95%] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                {optionsRegion.map((option) => (
+                  <div
+                    key={option}
+                    className="cursor-pointer text-lg px-4 py-2 text-black hover:bg-blue-500 hover:text-white transition-colors duration-300"
+                    onClick={() => select_Region(option)}
+                  >
+                    {option}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Content Type Dropdown */}
+          <div ref={dropdownRefContent} className="relative inline-block ml-12 z-20">
+            <button
+              className={`text-white text-xl border border-gray-500 py-1 px-3 rounded-md bg-[#161616] min-w-32 ${
+                isOpenContent ? "outline outline-2 outline-white" : "outline-none"
+              }`}
+              aria-haspopup="true"
+              aria-expanded={isOpenContent}
+              onClick={toggleDropdownContent}
+            >
+              {selectedContent}
+              <span className="ml-2 text-xs">▼</span>
+            </button>
+
+            {isOpenContent && (
+              <div className="absolute left-1/2 transform -translate-x-1/2 flex-col w-[95%] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                {optionsContent.map((option) => (
+                  <div
+                    key={option}
+                    className="cursor-pointer text-lg px-4 py-2 text-black hover:bg-blue-500 hover:text-white transition-colors duration-300"
+                    onClick={() => select_Content(option)}
+                  >
+                    {option}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Wrapper for Carousel and Buttons */}
         <div className="flex items-center relative h-56 bg-black">
           {/* Left Arrow */}
@@ -312,7 +458,7 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
                     <img
                       src={movie.image}
                       alt={movie.title}
-                      className="w-full h-auto mb-4 object-cover rounded-lg transition-transform duration-300 transform group-hover:scale-110"
+                      className="w-56 h-auto mb-4 object-cover rounded-lg transition-transform duration-300 transform group-hover:scale-110"
                     />
                   </a>
 
@@ -339,34 +485,74 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
           </button>
         </div>
 
-        {/* Modal for Larger Image */}
-        {selectedMovie && (
+      {/*---------------------------------------------------------------------------------------- */}
+      
+      {/* Modal for Larger Image */}
+      {selectedMovie && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-20"
+          onClick={() => setSelectedMovie(null)} // Close modal on background click
+        >
           <div
-            className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-20"
-            onClick={() => setSelectedMovie(null)} // Close modal on background click
+            className="bg-[#161616] border border-[#404040] rounded-lg relative max-w-3xl text-white"
+            onClick={(e) => e.stopPropagation()} // Prevent click propagation to background
           >
-            <div
-              className="bg-white p-4 rounded-lg relative"
-              onClick={(e) => e.stopPropagation()} // Prevent click propagation to background
+            {/* Close Button */}
+            <button
+              className="absolute top-4 right-8 text-white font-bold text-3xl z-30"
+              onClick={() => setSelectedMovie(null)} // Close button
             >
-              <button
-                className="absolute top-2 right-2 text-black font-bold"
-                onClick={() => setSelectedMovie(null)} // Close button
-              >
-                ✕
+              ✕
+            </button>
+
+            {/* Background Image with Gradient Overlay */}
+            <div
+              className="relative bg-slate-800 bg-cover bg-center min-h-[26em] rounded-t-lg overflow-hidden blur-animation"
+              style={{
+                backgroundImage: `url(${selectedMovie.image})`,
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+              }}
+            >
+              {/* Gradient Overlay for Fade Effect */}
+              <div
+                className="absolute bottom-0 left-0 w-full h-full"
+                style={{
+                  background: `
+                    linear-gradient(to top, #161616, transparent), /* Bottom-to-top gradient */
+                    linear-gradient(to top right, #161616 20%, transparent 50%)`,
+                }}
+              ></div>
+            </div>
+
+            {/* Movie Details */}
+            <div className="mt-2 px-10 pb-10">
+              {/* Metadata */}
+              <div className="flex items-center text-base space-x-2 mt-3">
+                <span className="px-2 py-1 rounded-md bg-[#414141]">2017</span>
+                <span className="px-2 py-1 rounded-md bg-[#414141]">R</span>
+                <span className="px-2 py-1 rounded-md bg-[#414141]">Movie</span>
+                <span className="px-2 py-1 rounded-md bg-[#414141]">Comedies</span>
+              </div>
+
+              {/* Description */}
+              <p className="text-white text-lg mt-8 leading-tight">
+                After learning their supposedly dead father is still alive, fraternal twins Peter and Kyle go on a road trip to find him, uncovering other truths.
+              </p>
+
+              {/* Call-to-Action Button */}
+              <button className="flex mt-12 bg-red-600 text-white px-6 py-3 font-semibold rounded-md text-xl">
+                Get Started
+                <ChevronRight className="size-8" />
               </button>
-              <img
-                src={selectedMovie.image}
-                alt={selectedMovie.title}
-                className="w-[90vw] max-w-3xl h-auto rounded-lg"
-              />
-              <h3 className="text-black text-xl font-semibold text-center mt-4">
-                {selectedMovie.title}
-              </h3>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
+
+    </div>
 
       {/*---------------------------------------------------------------------------------------- */}
       

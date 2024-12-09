@@ -41,6 +41,21 @@
     }
 }
 
+/*For the image fadein On the AuthScreen*/
+@keyframes blurFadeIn {
+    from {
+      filter: blur(30px);
+    }
+    to {
+      filter: blur(0px);
+    }
+  }
+  
+  .blur-animation {
+    animation: blurFadeIn 600ms forwards ease-out;
+  }
+
+  
 /* Error page radial gradient overlay */
 .error-page--content::before {
     /* Creates a radial gradient effect for the error page */
