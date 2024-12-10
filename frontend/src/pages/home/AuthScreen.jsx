@@ -140,7 +140,7 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
 
     {/*---------------------------------------------------------------------------------------- */}
     
-    const movies = [
+    const content = [
       { id: 1, title: "The Merry Gentlemen", image: "/merry_gentlemen.png" },
       { id: 2, title: "Hot Frosty", image: "/hot_frosty.png" },
       { id: 3, title: "Bob Peace", image: "/bob_peace.png" },
@@ -181,6 +181,28 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
         document.body.classList.remove("overflow-hidden");
       };
     }, [selectedMovie]); // Dependency on selectedMovie
+
+    
+      // Fetch dropdown options from API
+      useEffect(() => {
+        const fetchDropdownData = async () => {
+          try {
+            // Replace with your actual API endpoints
+            const regionResponse = await axios.get("/api/regions");
+            const contentResponse = await axios.get("/api/content-types");
+
+            setRegionOptions(regionResponse.data); // Assume API returns an array
+            setContentOptions(contentResponse.data);
+
+            setSelectedRegion(regionResponse.data[0] || "No Regions Available");
+            setSelectedContent(contentResponse.data[0] || "No Content Available");
+          } catch (error) {
+            console.error("Error fetching dropdown data:", error);
+          }
+        };
+
+        fetchDropdownData();
+      }, []);
 
     {/*----------------------------------------------------------------------------------------*/}
     
@@ -441,7 +463,7 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
           <div className="relative overflow-hidden w-full" ref={sliderRef}>
             {/* Movie Items */}
             <div className="flex transition-transform duration-700 gap-x-10">
-              {movies.map((movie) => (
+              {content.map((movie) => (
                 <div
                   key={movie.id}
                   className="flex-shrink-0 flex flex-col items-center relative h-56 group"

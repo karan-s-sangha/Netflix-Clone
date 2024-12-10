@@ -53,7 +53,6 @@ const HomeScreen = () => {
 				{/* Loading shimmer for the hero image */}
 				{imgLoading && (
 					<div className="absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10">
-						{/* Same Tailwind Explanation as above */}
 					</div>
 				)}
 
