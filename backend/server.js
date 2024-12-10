@@ -4,6 +4,7 @@ import path from "path"; // Node.js module for handling file paths
 
 // Importing routes and utilities
 import authRoutes from "./routes/auth.route.js";
+import homeRoutes from "./routes/home.route.js";
 import movieRoutes from "./routes/movie.route.js";
 import tvRoutes from "./routes/tv.route.js";
 import searchRoutes from "./routes/search.route.js";
@@ -20,6 +21,7 @@ app.use(cookieParser()); // Middleware to parse cookies in incoming requests. (E
 
 // Route handlers
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/home", homeRoutes);
 app.use("/api/v1/movie", protectRoute, movieRoutes);
 app.use("/api/v1/tv", protectRoute, tvRoutes);
 app.use("/api/v1/search", protectRoute, searchRoutes);

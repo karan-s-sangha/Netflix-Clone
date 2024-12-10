@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import Link for navigation and useNavigate for programmatic routing
 import { ChevronLeft, ChevronRight } from "lucide-react"; // Icon library
+import axios from 'axios'; // Import Axios for making HTTP requests.
 
 /**
  * AuthScreen Component
@@ -140,7 +141,7 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
 
     {/*---------------------------------------------------------------------------------------- */}
     
-    const content = [
+    const movies = [
       { id: 1, title: "The Merry Gentlemen", image: "/merry_gentlemen.png" },
       { id: 2, title: "Hot Frosty", image: "/hot_frosty.png" },
       { id: 3, title: "Bob Peace", image: "/bob_peace.png" },
@@ -181,28 +182,6 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
         document.body.classList.remove("overflow-hidden");
       };
     }, [selectedMovie]); // Dependency on selectedMovie
-
-    
-      // Fetch dropdown options from API
-      useEffect(() => {
-        const fetchDropdownData = async () => {
-          try {
-            // Replace with your actual API endpoints
-            const regionResponse = await axios.get("/api/regions");
-            const contentResponse = await axios.get("/api/content-types");
-
-            setRegionOptions(regionResponse.data); // Assume API returns an array
-            setContentOptions(contentResponse.data);
-
-            setSelectedRegion(regionResponse.data[0] || "No Regions Available");
-            setSelectedContent(contentResponse.data[0] || "No Content Available");
-          } catch (error) {
-            console.error("Error fetching dropdown data:", error);
-          }
-        };
-
-        fetchDropdownData();
-      }, []);
 
     {/*----------------------------------------------------------------------------------------*/}
     
@@ -257,6 +236,43 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
         document.removeEventListener("scroll", handleScroll_Region_Content, true);
       };
     }, []); // Run only on mount and unmount
+
+    {/*---------------------------------------------------------------------------------------- */}
+
+    {/*For Getting custom images from the api */}
+
+    // State for fetched dropdown data
+    const [dropdownData, setDropdownData] = useState([]);
+    const [displayedContent, setDisplayedContent] = useState([]);
+
+    // Fetch dropdown data when a selection changes
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const endpointMap = {
+            "United States Movies": "/api/v1/movie/trending",
+            "United States TV Shows": "/api/v1/home/us/tvshows",
+            "Global Movies": "/api/v1/home/global/movies",
+            "Global TV Shows": "/api/v1/home/global/tvshows",
+          };
+
+          const endpointKey = endpointMap[`${selectedRegion} ${selectedContent}`];
+          const response = await axios.get(endpointMap[endpointKey]);
+
+          setDropdownData(response.data.content || []);
+          console.log("Top ",dropdownData);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+
+      fetchData();
+    }, [selectedRegion, selectedContent]);
+
+    // Update displayed content when dropdown data changes
+    useEffect(() => {
+      setDisplayedContent(dropdownData);
+    }, [dropdownData]);
 
   {/*---------------------------------------------------------------------------------------- */}
 
@@ -463,7 +479,7 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
           <div className="relative overflow-hidden w-full" ref={sliderRef}>
             {/* Movie Items */}
             <div className="flex transition-transform duration-700 gap-x-10">
-              {content.map((movie) => (
+              {movies.map((movie) => (
                 <div
                   key={movie.id}
                   className="flex-shrink-0 flex flex-col items-center relative h-56 group"
