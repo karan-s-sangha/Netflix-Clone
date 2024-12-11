@@ -2,8 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import Link for navigation and useNavigate for programmatic routing
 import { ChevronLeft, ChevronRight } from "lucide-react"; // Icon library
 import axios from 'axios'; // Import Axios for making HTTP requests.
-import { SMALL_IMG_BASE_URL, ORIGINAL_IMG_BASE_URL } from "../../utils/constants.js"; // Constants for categories and image URLs.
+import { SMALL_IMG_BASE_URL, ORIGINAL_IMG_BASE_URL,translations } from "../../utils/constants.js"; // Constants for categories and image URLs.
 import { genreMap } from "../../utils/constants";
+import { useLanguageStore } from "../../store/content.js"; // Import the Zustand store
 
 /**
  * AuthScreen Component
@@ -41,6 +42,10 @@ const AuthScreen = () => {
   const toggleDropdown1 = () => setIsOpen1((prev) => !prev); // Top dropdown toggle
   const toggleDropdown2 = () => setIsOpen2((prev) => !prev); // Bottom dropdown toggle
   
+  const { language } = useLanguageStore(); // Access current language
+  const { setLanguage } = useLanguageStore(); // Access current language
+  const t = translations[language]; // Get translations for the current language
+
   const handleClickOutside = (event) => {
     // Close the top dropdown if clicked outside
     if (dropdownRef1.current && !dropdownRef1.current.contains(event.target)) {
@@ -60,6 +65,7 @@ const AuthScreen = () => {
 
   const selectLanguage = (language) => {
     setSelectedLanguage(language); // Update selected language
+    setLanguage(language); // To update the Value in the Zustand
     setIsOpen1(false); // Close dropdown
     setIsOpen2(false);
   };
@@ -78,79 +84,20 @@ const AuthScreen = () => {
 
     {/*---------------------------------------------------------------------------------------- */}
 
-    const features = [
-      {
-        title: 'Enjoy on your TV',
-        description: 'Watch on Smart TVs, Playstation, Xbox, Chromecast, Apple TV, Blu-ray players, and more.',
-        icon: '/small_tv.png'
-      },
-      {
-        title: 'Download your shows to watch offline',
-        description: 'Save your favorites easily and always have something to watch.',
-        icon: '/download.png', // Replace with your actual image/icon
-      },
-      {
-        title: 'Watch everywhere',
-        description: 'Stream unlimited movies and TV shows on your phone, tablet, laptop, and TV.',
-        icon: '/watch_everywhere.png', // Replace with your actual image/icon
-      },
-      {
-        title: 'Create profiles for kids',
-        description: 'Send kids on adventures with their favorite characters in a space made just for them — free with your membership.',
-        icon: '/kids_profile.png', // Replace with your actual image/icon
-      },
-    ];
+    {/*All the Features available on Netflix */}
+    const features = t.reasonsToJoin;
 
     {/*---------------------------------------------------------------------------------------- */}
 
     //For the FAQ
     const [activeIndex, setActiveIndex] = useState(null);
-    const faqs = [
-      {
-        question: "What is Netflix?",
-        answer: `Netflix is a streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries, and more on thousands of internet-connected devices.
-        
-        You can watch as much as you want, whenever you want – all for one low monthly price. There's always something new to discover and new TV shows and movies are added every week!`,
-      },
-      {
-        question: "How much does Netflix cost?",
-        answer: `Watch Netflix on your smartphone, tablet, Smart TV, laptop, or streaming device, all for one fixed monthly fee. Plans range from $6.99 to $22.99 a month (pre-tax). No extra costs, no contracts.`,
-      },
-      {
-        question: "Where can I watch?",
-        answer: `Watch anywhere, anytime. Sign in with your Netflix account to watch instantly on the web at netflix.com from your personal computer or on any internet-connected device that offers the Netflix app, including smart TVs, smartphones, tablets, streaming media players and game consoles.
-
-You can also download your favorite shows with the iOS or Android app. Use downloads to watch while you're on the go and without an internet connection. Take Netflix with you anywhere.`,
-      },
-      {
-        question: "How do I cancel?",
-        answer: `Netflix is flexible. There are no pesky contracts and no commitments. You can easily cancel your account online in two clicks. There are no cancellation fees – start or stop your account anytime.`,
-      },
-      {
-        question: "What can I watch on Netflix?",
-        answer: `Netflix has an extensive library of feature films, documentaries, TV shows, anime, award-winning Netflix originals, and more. Watch as much as you want, anytime you want.`,
-      },
-      {
-        question: "Is Netflix good for kids?",
-        answer: `The Netflix Kids experience is included in your membership to give parents control while kids enjoy family-friendly TV shows and movies in their own space.
-
-Kids profiles come with PIN-protected parental controls that let you restrict the maturity rating of content kids can watch and block specific titles you don’t want kids to see.`,
-      },
-    ];
+    const faqs = t.faqs;
     const toggleFAQ = (index) => {
       setActiveIndex(activeIndex === index ? null : index); // Toggle active item
     };
 
     {/*---------------------------------------------------------------------------------------- */}
     
-    // const movies = [
-    //   { id: 1, title: "The Merry Gentlemen", image: "/merry_gentlemen.png" },
-    //   { id: 2, title: "Hot Frosty", image: "/hot_frosty.png" },
-    //   { id: 3, title: "Bob Peace", image: "/bob_peace.png" },
-    //   { id: 4, title: "Buy Now!", image: "/buy_now.png" },
-    //   { id: 5, title: "The Lost Children", image: "/lost_children.png" },
-    //   { id: 6, title: "Another Movie", image: "/another_movie.png" },
-    // ];
     
     const sliderRef = useRef(null);
   
@@ -245,33 +192,32 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
     const [dropdownData, setDropdownData] = useState([]);
     const [displayedContent, setDisplayedContent] = useState([]);
 
-    // Default values for region and content
-    const defaultRegion = "United States";
-    const defaultContent = "Movies";
-
     // Fetch dropdown data when a selection changes
     useEffect(() => {
       const fetchData = async () => {
-        try {
-          const endpointMap = {
-            "United States Movies": `/api/v1/home/us/movies`,
-            "United States TV Shows": `/api/v1/home/us/tvshows`,
-            "Global Movies": `/api/v1/home/global/movies`,
-            "Global TV Shows": `/api/v1/home/global/tvshows`,
-          };
+          try {
+              const endpointMap = {
+                  "United States Movies": `/api/v1/home/us/movies`,
+                  "United States TV Shows": `/api/v1/home/us/tvshows`,
+                  "Global Movies": `/api/v1/home/global/movies`,
+                  "Global TV Shows": `/api/v1/home/global/tvshows`,
+              };
 
-          const endpointKey = endpointMap[`${selectedRegion} ${selectedContent}`];
-          const response = await axios.get(endpointKey);
+              const endpointKey = endpointMap[`${selectedRegion} ${selectedContent}`];
+              const response = await axios.get(endpointKey, {
+                  params: { language: selectedLanguage }, // Pass the selected language as a query parameter
+              });
 
-          setDropdownData(response.data.content || []);
-
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
+              setDropdownData(response.data.content || []);
+              console.log(response.data.content);
+          } catch (error) {
+              console.error("Error fetching data:", error);
+          }
       };
 
       fetchData();
-    }, [selectedRegion, selectedContent]); // Dependency array to refetch when these change
+    }, [selectedRegion, selectedContent, selectedLanguage]); // Add selectedLanguage to the dependency array
+
 
     // Update displayed content when dropdown data changes
     useEffect(() => {
@@ -285,46 +231,40 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
     <div>
       <div className="hero-bg relative">
         {/* Navbar Section */}
-        <header className="max-w-full mx-32 flex items-center justify-between p-5 pb-10">
+        <header className="max-w-full mx-0 md:mx-32 flex items-center justify-between p-5 pb-10">
           {/* Netflix logo displayed on the top-left */}
           <img src="/netflix-logo.png" alt="Netflix Logo" className="h-12 w-auto" />
 
           {/* Buttons aligned side by side on the right */}
           <div className="flex items-center gap-4">
-            
-
-
-
-          <div ref={dropdownRef1} className="relative inline-block text-left">
-            <button
-              className={`text-white text-base border py-1 px-3 rounded-md ${
-                isOpen1 ? "border-2" : "border"
-              }`}
-              aria-haspopup="true"
-              aria-expanded={isOpen1}
-              onClick={toggleDropdown1}
-            >
-              {`本A ` + selectedLanguage}
-              <span className="ml-2 text-xs">▼</span>
-            </button>
-            {isOpen1 && (
-              <div className="absolute left-1/2 transform -translate-x-1/2 flex-col justify-center w-[95%] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">              
-                  {options.map((option) => (
-                  <div
-                    key={option}
-                    className="cursor-pointer text-sm px-4 py-2 text-black text-center hover:bg-blue-500"
-                    onClick={() => selectLanguage(option)}
-                  >
-                    {option}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-
+            <div ref={dropdownRef1} className="relative inline-block text-left">
+              <button
+                className={`text-white text-base border py-1 px-3 rounded-md ${
+                  isOpen1 ? "border-2" : "border"
+                }`}
+                aria-haspopup="true"
+                aria-expanded={isOpen1}
+                onClick={toggleDropdown1}
+              >
+                {`本A ` + selectedLanguage}
+                <span className="ml-2 text-xs">▼</span>
+              </button>
+              {isOpen1 && (
+                <div className="absolute left-1/2 transform -translate-x-1/2 flex-col justify-center w-[95%] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">              
+                    {options.map((option) => (
+                    <div
+                      key={option}
+                      className="cursor-pointer text-sm px-4 py-2 text-black text-center hover:bg-blue-500"
+                      onClick={() => selectLanguage(option)}
+                    >
+                      {option}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
             <Link to={"/login"} className="text-white bg-red-700 py-1 px-3 rounded-sm">
-              Sign In
+            {t.signIn}
             </Link>
           </div>
         </header>
@@ -334,13 +274,13 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
         <div className="flex flex-col items-center justify-center text-center py-40 text-white w-[44%] mx-auto">
           {/* Main heading introducing Netflix */}
           <h1 className="text-3xl md:text-6xl font-extrabold mb-4">
-            Unlimited movies, TV shows, and more
+            {t.unlimited}
           </h1>
           {/* Subheading providing additional details */}
-          <p className="text-xl font-bold mb-4">Starts at $6.99. Cancel anytime.</p>
+          <p className="text-xl font-bold mb-4">{t.startsAt}</p>
           {/* Call-to-action prompting the user to enter their email */}
           <p className="mb-4">
-            Ready to watch? Enter your email to create or restart your membership.
+            {t.readyToWatch}
           </p>
 
           {/* Form to collect user's email */}
@@ -348,14 +288,14 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
             {/* Email input field */}
             <input
               type="email"
-              placeholder="Email address"
+              placeholder={t.emailAddress}
               className="text-white p-2 rounded flex-1 bg-black/80 border border-gray-500"
               value={email}
               onChange={(e) => setEmail(e.target.value)} // Update email state on user input
             />
             {/* Submit button with "Get Started" text and a Chevron icon */}
             <button className="bg-red-600 font-semibold text-xl lg:text-2xl px-2 lg:px-6 py-1 md:py-2 rounded flex justify-center items-center">
-              Get Started
+                {t.getStarted}
               <ChevronRight className="size-8 md:size-10" />
             </button>
           </form>
@@ -385,18 +325,18 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
               {/* Text Content */}
               <div className="flex-1">
                 <h2 className="text-xl font-bold">
-                  The Netflix you love for just $6.99.
+                  {t.affordablePlan}
                 </h2>
                 <p className="text-md font-semibold text-gray-300">
-                  Get our most affordable, ad-supported plan.
+                   {t.adSupportedPlan}
                 </p>
               </div>
 
               {/* Learn More Button */}
               <div className="ml-auto"> {/* Aligns button to the right */}
-                <button className="font-bold text-base bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-md">
-                  Learn More
-                </button>
+                <Link to={"/login"} className="font-bold text-base bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-md">
+                    {t.learnMore}
+                </Link>
               </div>
             </div>
           </div>
@@ -407,7 +347,7 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
       
       {/* The movies to watch on Netflix */}
       <div className="bg-black text-white p-6 px-12 md:px-48 py-16 relative">
-        <h2 className="text-3xl font-bold mb-6">Trending Now</h2>
+        <h2 className="text-3xl font-bold mb-6">{t.trending}</h2>
 
         {/* Optimized Dropdown for Region and Content Type Selection */}
         <div className="w-full bg-[black] flex items-center space-x-6 pb-5">
@@ -421,7 +361,7 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
               aria-expanded={isOpenRegion}
               onClick={toggleDropdownRegion}
             >
-              {selectedRegion}
+              {t.country[selectedRegion]}
               <span className="ml-2 text-xs">▼</span>
             </button>
 
@@ -433,8 +373,8 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
                     className="cursor-pointer text-lg px-4 py-2 text-black hover:bg-blue-500 hover:text-white transition-colors duration-300"
                     onClick={() => select_Region(option)}
                   >
-                    {option}
-                  </div>
+                    {t.country[option]}
+                    </div>
                 ))}
               </div>
             )}
@@ -450,7 +390,7 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
               aria-expanded={isOpenContent}
               onClick={toggleDropdownContent}
             >
-              {selectedContent}
+              {t.content[selectedContent]}
               <span className="ml-2 text-xs">▼</span>
             </button>
 
@@ -462,7 +402,9 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
                     className="cursor-pointer text-lg px-4 py-2 text-black hover:bg-blue-500 hover:text-white transition-colors duration-300"
                     onClick={() => select_Content(option)}
                   >
-                    {option}
+                    {/* {option} */}
+                    {t.content[option]}
+
                   </div>
                 ))}
               </div>
@@ -484,7 +426,7 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
           <div className="relative overflow-hidden w-full" ref={sliderRef}>
             {/* Movie Items */}
             <div className="flex transition-transform duration-700 gap-x-10">
-              {dropdownData.map((movie,index) => (
+              {displayedContent.map((movie,index) => (
                 <div
                   key={movie.id}
                   className="flex-shrink-0 flex flex-col items-center relative h-56 group"
@@ -569,7 +511,9 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
                 }}
               ></div>
             </div>
-
+            <div className="text-5xl px-10">
+              {selectedMovie.title}
+            </div>
             {/* Movie Details */}
             <div className="mt-2 px-10 pb-10">
               {/* Metadata */}
@@ -590,7 +534,6 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
                 <span className="px-2 py-1 rounded-md bg-[#414141]">
                   {selectedMovie.media_type || "Movie"}
                 </span>
-                {/* Genres */}
                 {/* Genres */}
                 {selectedMovie.genre_ids && selectedMovie.genre_ids.length > 0 && (
                 <div className="flex flex-wrap gap-2">
@@ -615,10 +558,10 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
               </p>
 
               {/* Call-to-Action Button */}
-              <button className="flex mt-8 bg-red-600 text-white px-6 py-3 font-semibold rounded-md text-xl">
-                Get Started
+              <Link to={"/login"} className="inline-flex mt-8 bg-red-600 text-white px-6 py-3 font-semibold rounded-md text-xl">
+                  {t.getStarted}
                 <ChevronRight className="size-8" />
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -632,9 +575,9 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
       {/*Grid for More Reasons to Join */}
       <div className="bg-black content-center flex justify-center">
         <div className="bg-black text-white py-10 w-[80%]">
-          <h2 className="text-2xl font-bold text-left mb-4">More Reasons to Join</h2>
+          <h2 className="text-2xl font-bold text-left mb-4">{features.title}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {features.map((feature, index) => (
+            {features.features.map((feature, index) => (
               <div
                 key={index}
                 className="bg-gradient-to-br from-[#1a2144] to-[#210e17] rounded-xl shadow-md p-4 flex flex-col justify-between h-72"
@@ -659,9 +602,9 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
       
       {/* This is for the FAQ */}
       <div className="bg-black text-white text-2xl p-6 flex-col px-12 md:px-36">
-        <h2 className="mb-4 font-bold">Frequently Asked Questions</h2>
+        <h2 className="mb-4 font-bold">{faqs.title}</h2>
         <div className="space-y-2">
-          {faqs.map((faq, index) => (
+          {faqs.questions.map((faq, index) => (
             <div
               key={index}
               className={`border border-gray-700 overflow-hidden rounded-lg`}
@@ -698,8 +641,6 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
         </div>
       </div>
 
-
-
       {/*---------------------------------------------------------------------------------------- */}
 
       {/* Email on the Bottom */}
@@ -707,7 +648,7 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
         <div className="flex flex-col items-center justify-center text-center py-10 text-white w-[44%] mx-auto">
           {/* Call-to-action prompting the user to enter their email */}
           <p className="mb-4">
-            Ready to watch? Enter your email to create or restart your membership.
+            {t.readyToWatch}
           </p>
 
           {/* Form to collect user's email */}
@@ -715,14 +656,14 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
             {/* Email input field */}
             <input
               type="email"
-              placeholder="Email address"
+              placeholder={t.emailAddress}
               className="text-white p-2 rounded flex-1 bg-black/80 border border-gray-500"
               value={email}
               onChange={(e) => setEmail(e.target.value)} // Update email state on user input
             />
             {/* Submit button with "Get Started" text and a Chevron icon */}
             <button className="bg-red-600 font-semibold text-xl lg:text-2xl px-2 lg:px-6 py-1 md:py-2 rounded flex justify-center items-center">
-              Get Started
+                {t.getStarted}
               <ChevronRight className="size-8 md:size-10" />
             </button>
           </form>

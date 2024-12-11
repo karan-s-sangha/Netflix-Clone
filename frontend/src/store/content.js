@@ -10,3 +10,7 @@ export const useContentStore = create((set) => ({
     setContentType: (type) => set({ contentType: type }),
     // `set` is a function provided by Zustand to update the store's state.
 }));
+export const useLanguageStore = create((set) => ({
+    language: "English", // Default language
+    setLanguage: (type) => set({ language:type }), // Action to update language
+}));
