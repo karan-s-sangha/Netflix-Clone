@@ -512,7 +512,7 @@ const AuthScreen = () => {
               ></div>
             </div>
             <div className="text-5xl px-10">
-              {selectedMovie.title}
+                {selectedMovie.title || selectedMovie.name}
             </div>
             {/* Movie Details */}
             <div className="mt-2 px-10 pb-10">
