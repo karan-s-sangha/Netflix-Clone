@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import Link for navigation and useNavigate for programmatic routing
 import { ChevronLeft, ChevronRight } from "lucide-react"; // Icon library
 import axios from 'axios'; // Import Axios for making HTTP requests.
+import { SMALL_IMG_BASE_URL, ORIGINAL_IMG_BASE_URL } from "../../utils/constants.js"; // Constants for categories and image URLs.
+import { genreMap } from "../../utils/constants";
 
 /**
  * AuthScreen Component
@@ -141,14 +143,14 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
 
     {/*---------------------------------------------------------------------------------------- */}
     
-    const movies = [
-      { id: 1, title: "The Merry Gentlemen", image: "/merry_gentlemen.png" },
-      { id: 2, title: "Hot Frosty", image: "/hot_frosty.png" },
-      { id: 3, title: "Bob Peace", image: "/bob_peace.png" },
-      { id: 4, title: "Buy Now!", image: "/buy_now.png" },
-      { id: 5, title: "The Lost Children", image: "/lost_children.png" },
-      { id: 6, title: "Another Movie", image: "/another_movie.png" },
-    ];
+    // const movies = [
+    //   { id: 1, title: "The Merry Gentlemen", image: "/merry_gentlemen.png" },
+    //   { id: 2, title: "Hot Frosty", image: "/hot_frosty.png" },
+    //   { id: 3, title: "Bob Peace", image: "/bob_peace.png" },
+    //   { id: 4, title: "Buy Now!", image: "/buy_now.png" },
+    //   { id: 5, title: "The Lost Children", image: "/lost_children.png" },
+    //   { id: 6, title: "Another Movie", image: "/another_movie.png" },
+    // ];
     
     const sliderRef = useRef(null);
   
@@ -239,40 +241,43 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
 
     {/*---------------------------------------------------------------------------------------- */}
 
-    {/*For Getting custom images from the api */}
-
     // State for fetched dropdown data
     const [dropdownData, setDropdownData] = useState([]);
     const [displayedContent, setDisplayedContent] = useState([]);
+
+    // Default values for region and content
+    const defaultRegion = "United States";
+    const defaultContent = "Movies";
 
     // Fetch dropdown data when a selection changes
     useEffect(() => {
       const fetchData = async () => {
         try {
           const endpointMap = {
-            "United States Movies": "/api/v1/movie/trending",
-            "United States TV Shows": "/api/v1/home/us/tvshows",
-            "Global Movies": "/api/v1/home/global/movies",
-            "Global TV Shows": "/api/v1/home/global/tvshows",
+            "United States Movies": `/api/v1/home/us/movies`,
+            "United States TV Shows": `/api/v1/home/us/tvshows`,
+            "Global Movies": `/api/v1/home/global/movies`,
+            "Global TV Shows": `/api/v1/home/global/tvshows`,
           };
 
           const endpointKey = endpointMap[`${selectedRegion} ${selectedContent}`];
-          const response = await axios.get(endpointMap[endpointKey]);
+          const response = await axios.get(endpointKey);
 
           setDropdownData(response.data.content || []);
-          console.log("Top ",dropdownData);
+
         } catch (error) {
           console.error("Error fetching data:", error);
         }
       };
 
       fetchData();
-    }, [selectedRegion, selectedContent]);
+    }, [selectedRegion, selectedContent]); // Dependency array to refetch when these change
 
     // Update displayed content when dropdown data changes
     useEffect(() => {
       setDisplayedContent(dropdownData);
     }, [dropdownData]);
+
 
   {/*---------------------------------------------------------------------------------------- */}
 
@@ -479,7 +484,7 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
           <div className="relative overflow-hidden w-full" ref={sliderRef}>
             {/* Movie Items */}
             <div className="flex transition-transform duration-700 gap-x-10">
-              {movies.map((movie) => (
+              {dropdownData.map((movie,index) => (
                 <div
                   key={movie.id}
                   className="flex-shrink-0 flex flex-col items-center relative h-56 group"
@@ -494,7 +499,8 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
                     className="block"
                   >
                     <img
-                      src={movie.image}
+                      //src={movie.image}
+                      src={SMALL_IMG_BASE_URL + movie.poster_path} // Fetch image using the base URL and path.
                       alt={movie.title}
                       className="w-56 h-auto mb-4 object-cover rounded-lg transition-transform duration-300 transform group-hover:scale-110"
                     />
@@ -507,7 +513,7 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
                       WebkitTextStroke: "2px white",
                     }}
                   >
-                    {movie.id}
+                     {index + 1}
                   </span>
                 </div>
               ))}
@@ -532,7 +538,7 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
           onClick={() => setSelectedMovie(null)} // Close modal on background click
         >
           <div
-            className="bg-[#161616] border border-[#404040] rounded-lg relative max-w-3xl text-white"
+            className="bg-[#161616] border border-[#404040] rounded-lg relative max-w-2xl text-white"
             onClick={(e) => e.stopPropagation()} // Prevent click propagation to background
           >
             {/* Close Button */}
@@ -545,9 +551,9 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
 
             {/* Background Image with Gradient Overlay */}
             <div
-              className="relative bg-slate-800 bg-cover bg-center min-h-[26em] rounded-t-lg overflow-hidden blur-animation"
+              className="relative bg-slate-800 bg-cover bg-center min-h-[22em] rounded-t-lg overflow-hidden blur-animation"
               style={{
-                backgroundImage: `url(${selectedMovie.image})`,
+                backgroundImage: `url(${ORIGINAL_IMG_BASE_URL + selectedMovie.backdrop_path})`,
                 backgroundPosition: "center",
                 backgroundSize: "cover",
                 backgroundRepeat: "no-repeat",
@@ -568,19 +574,48 @@ Kids profiles come with PIN-protected parental controls that let you restrict th
             <div className="mt-2 px-10 pb-10">
               {/* Metadata */}
               <div className="flex items-center text-base space-x-2 mt-3">
-                <span className="px-2 py-1 rounded-md bg-[#414141]">2017</span>
-                <span className="px-2 py-1 rounded-md bg-[#414141]">R</span>
-                <span className="px-2 py-1 rounded-md bg-[#414141]">Movie</span>
-                <span className="px-2 py-1 rounded-md bg-[#414141]">Comedies</span>
+                {/* Release Year */}
+                {selectedMovie.release_date && (
+                  <span className="px-2 py-1 rounded-md bg-[#414141]">
+                    {selectedMovie.release_date.split("-")[0]}
+                  </span>
+                )}
+                {/* Rating */}
+                {selectedMovie.vote_average && (
+                  <span className="px-2 py-1 rounded-md bg-[#414141]">
+                    {selectedMovie.vote_average >= 7 ? "TV-PG" : "R"}
+                  </span>
+                )}
+                {/* Type */}
+                <span className="px-2 py-1 rounded-md bg-[#414141]">
+                  {selectedMovie.media_type || "Movie"}
+                </span>
+                {/* Genres */}
+                {/* Genres */}
+                {selectedMovie.genre_ids && selectedMovie.genre_ids.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {selectedMovie.genre_ids
+                    .filter((id) => genreMap[id]) // Filter out unknown genres
+                    .map((id) => (
+                      <span
+                        key={id}
+                        className="px-2 py-1 rounded-md bg-[#414141] text-white text-sm"
+                      >
+                        {genreMap[id]}
+                      </span>
+                    ))}
+                </div>
+              )}
+
               </div>
 
               {/* Description */}
               <p className="text-white text-lg mt-8 leading-tight">
-                After learning their supposedly dead father is still alive, fraternal twins Peter and Kyle go on a road trip to find him, uncovering other truths.
+                {selectedMovie.overview || "No description available."}
               </p>
 
               {/* Call-to-Action Button */}
-              <button className="flex mt-12 bg-red-600 text-white px-6 py-3 font-semibold rounded-md text-xl">
+              <button className="flex mt-8 bg-red-600 text-white px-6 py-3 font-semibold rounded-md text-xl">
                 Get Started
                 <ChevronRight className="size-8" />
               </button>

@@ -10,12 +10,9 @@ export async function getNetflixUSMovies(req, res) {
         );
 
         // Respond with the fetched movies
-        console.log("US Movies Passed");
-
         res.status(200).json({ success: true, content: data.results });
     } catch (error) {
         // Handle errors and respond with a 500 status code
-        console.log("US Movies Failed");
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
