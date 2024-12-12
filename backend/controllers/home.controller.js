@@ -15,7 +15,7 @@ export async function getNetflixUSMovies(req, res) {
     try {
         const language = getLanguageCode(req.query.language || "English");
         const data = await fetchFromTMDB(
-            `https://api.themoviedb.org/3/discover/movie?with_networks=213&region=US&language=${language}&page=1`
+            `https://api.themoviedb.org/3/discover/movie?with_watch_providers=8&watch_region=US&language=${language}&page=1`
         );
 
         res.status(200).json({ success: true, content: data.results });
@@ -29,7 +29,7 @@ export async function getNetflixUSTvShows(req, res) {
     try {
         const language = getLanguageCode(req.query.language || "English");
         const data = await fetchFromTMDB(
-            `https://api.themoviedb.org/3/discover/tv?with_networks=213&region=US&language=${language}&page=1`
+            `https://api.themoviedb.org/3/discover/tv?with_watch_providers=8&watch_region=US&language=${language}&page=1`
         );
 
         res.status(200).json({ success: true, content: data.results });
@@ -43,7 +43,7 @@ export async function getNetflixGlobalMovies(req, res) {
     try {
         const language = getLanguageCode(req.query.language || "English");
         const data = await fetchFromTMDB(
-            `https://api.themoviedb.org/3/discover/movie?with_networks=213&language=${language}&page=1`
+            `https://api.themoviedb.org/3/discover/movie?with_watch_providers=8&language=${language}&page=1`
         );
 
         res.status(200).json({ success: true, content: data.results });
@@ -57,7 +57,7 @@ export async function getNetflixGlobalTvShows(req, res) {
     try {
         const language = getLanguageCode(req.query.language || "English");
         const data = await fetchFromTMDB(
-            `https://api.themoviedb.org/3/discover/tv?with_networks=213&language=${language}&page=1`
+            `https://api.themoviedb.org/3/discover/tv?with_watch_providers=8&language=${language}&page=1`
         );
 
         res.status(200).json({ success: true, content: data.results });

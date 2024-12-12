@@ -209,7 +209,6 @@ const AuthScreen = () => {
               });
 
               setDropdownData(response.data.content || []);
-              console.log(response.data.content);
           } catch (error) {
               console.error("Error fetching data:", error);
           }
