@@ -1,6 +1,8 @@
 import { useState } from "react"; // Import React's `useState` hook for managing state variables.
 import { Link } from "react-router-dom"; // Import `Link` from React Router for navigation without full page reloads.
 import { useAuthStore } from "../store/authUser"; // Import `useAuthStore` to access authentication-related state and functions.
+import { useLanguageStore } from "../store/content.js"; // Import the Zustand store
+import { translations } from "../utils/constants.js"; // Constants for categories and image URLs.
 
 // Define the `SignUpPage` functional component.
 const SignUpPage = () => {
@@ -21,6 +23,11 @@ const SignUpPage = () => {
 		e.preventDefault(); // Prevent the default form submission behavior (page reload).
 		signup({ email, username, password }); // Call the signup function with user inputs.
 	};
+	
+	{/*For Language Change of the Sign Up page */}
+	const { language } = useLanguageStore(); // Access current language
+	const t = translations[language]; // Get translations for the current language
+	
 
 	return (
 		<div className="bg-black/50 bg-blend-overlay bg-[url('/hero.jpg')] bg-left-top bg-no-repeat bg-cover h-screen md:bg-top">
@@ -47,7 +54,7 @@ const SignUpPage = () => {
 						- `rounded-lg`: Adds large border-radius (8px) for rounded corners.
 						- `shadow-md`: Applies a medium shadow for an elevated appearance.
 					*/}
-					<h1 className="text-left text-white text-3xl font-bold mb-4">Sign Up</h1>
+					<h1 className="text-left text-white text-3xl font-bold mb-4">{t.signUp}</h1>
 					{/* Form header */}
 					{/* Tailwind Classes:
 						- `text-center`: Centers the text horizontally.
@@ -66,7 +73,7 @@ const SignUpPage = () => {
 							<input
 								type="email"
 								className="w-full h-14 px-3 py-2 mt-1 border border-[#808080] rounded-md bg-transparent text-white focus:outline-none focus:ring"
-								placeholder="Email"
+								placeholder={t.email}
 								id="email"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
@@ -77,7 +84,7 @@ const SignUpPage = () => {
 							<input
 								type="text"
 								className="w-full h-14 px-3 py-2 mt-1 border border-[#808080] rounded-md bg-transparent text-white focus:outline-none focus:ring"
-								placeholder="Username"
+								placeholder={t.username}
 								id="username"
 								value={username}
 								onChange={(e) => setUsername(e.target.value)}
@@ -89,7 +96,7 @@ const SignUpPage = () => {
 							<input
 								type="password"
 								className="w-full h-14 px-3 py-2 mt-1 border border-[#808080] rounded-md bg-transparent text-white focus:outline-none focus:ring"
-								placeholder="Password"
+								placeholder={t.password}
 								id="password"
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
@@ -101,7 +108,7 @@ const SignUpPage = () => {
 							className="w-full py-2 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700"
 							disabled={isSigningUp}
 						>
-							{isSigningUp ? "Loading..." : "Sign Up"}
+							{isSigningUp ? "Loading..." : t.signUp}
 						</button>
 						{/* Submit button */}
 						{/* Tailwind Classes:
@@ -116,9 +123,9 @@ const SignUpPage = () => {
 					</form>
 
 					<div className="text-center text-gray-400">
-						Already a member?{" "}
+						{t.alreadyMember}{" "}
 						<Link to={"/login"} className="text-red-500 hover:underline">
-							Sign in
+							{t.signIn}
 						</Link>
 					</div>
 					{/* Link to the sign-in page */}

@@ -1,6 +1,8 @@
 import { useState } from "react"; // React hook for managing component state.
 import { Link } from "react-router-dom"; // React Router for navigation between routes.
 import { useAuthStore } from "../store/authUser"; // Zustand store for managing authentication state.
+import { useLanguageStore } from "../store/content.js"; // Import the Zustand store
+import { translations } from "../utils/constants.js"; // Constants for categories and image URLs.
 
 const LoginPage = () => {
 	// Local state for managing email and password inputs.
@@ -17,6 +19,10 @@ const LoginPage = () => {
 		e.preventDefault(); // Prevent default form submission behavior.
 		login({ email, password }); // Call the login function from the auth store.
 	};
+
+	{/*For Language Change of the Sign Up page */}
+	const { language } = useLanguageStore(); // Access current language
+	const t = translations[language]; // Get translations for the current language
 
 	return (
 		<div className="bg-black/50 bg-blend-overlay bg-[url('/hero.jpg')] bg-left-top bg-no-repeat bg-cover h-screen md:bg-top">
@@ -52,7 +58,7 @@ const LoginPage = () => {
 						- `shadow-md`: Adds a medium shadow for a raised appearance.
 					*/}
 
-					<h1 className="text-left text-white text-3xl font-bold mb-4">Sign In</h1>
+					<h1 className="text-left text-white text-3xl font-bold mb-4">{t.signIn}</h1>
 					{/* Form Title */}
 					{/* Tailwind CSS Classes:
 						- `text-center`: Centers the text horizontally.
@@ -72,7 +78,7 @@ const LoginPage = () => {
 							<input
 								type="email"
 								className="w-full h-14 px-3 py-2 mt-1 border border-[#808080] rounded-md bg-transparent text-white focus:outline-none focus:ring"
-								placeholder="Email"
+								placeholder={t.email}
 								id="email"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
@@ -84,7 +90,7 @@ const LoginPage = () => {
 							<input
 								type="password"
 								className="w-full h-14 px-3 py-2 mt-1 border border-[#808080] rounded-md bg-transparent text-white focus:outline-none focus:ring"
-								placeholder="Password"
+								placeholder={t.password}
 								id="password"
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
@@ -106,21 +112,21 @@ const LoginPage = () => {
 								- `rounded-md`: Adds medium rounded corners (4px radius).
 								- `hover:bg-red-700`: Changes the background color on hover.
 							*/}
-							{isLoggingIn ? "Loading..." : "Sign In"}
+							{isLoggingIn ? "Loading..." : t.signIn}
 							{/* Show "Loading..." while the login process is in progress. */}
 						</button>
 					</form>
 
 					<div className="text-left text-gray-400">
-						New to Netflix?&nbsp; 
+							{t.newToNetflix}&nbsp; 
 						<Link to={"/signup"} className="text-white font-bold hover:underline">
-							Sign up now.
+							{t.signUpNow}
 						</Link>
 					</div>
 
 					<div className="text-left text-sm text-gray-400">
 						<p className="inline">
-							This page is not protected by Google reCAPTCHA to ensure you're not a bot.&nbsp;
+							{t.recaptchaNote}&nbsp;
 						</p>
 						{!showInfo && (
 							<button
@@ -128,7 +134,7 @@ const LoginPage = () => {
 								aria-expanded={showInfo}
 								className="text-blue-500 hover:underline"
 							>
-								Learn more.
+								{t.learnMore}
 							</button>
 						)}
 						<br />

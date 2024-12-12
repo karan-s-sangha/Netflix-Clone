@@ -61,6 +61,16 @@ export const genreMap = {
         "United States": "United States",
         Movies: "Movies",
         Global: "Global",
+        signUp: "Sign Up",
+        email: "Email",
+        username: "Username",
+        password: "Password",
+        alreadyMember: "Already a member?",
+        newToNetflix: "New to Netflix?",
+        signUpNow: "Sign up now.",
+        recaptchaNote: "This page is not protected by Google reCAPTCHA to ensure you're not a bot.",
+        learnMore: "Learn more.",
+
         content: {
             Movies: "Movies",
             "TV Shows": "TV Shows", // Added "TV Shows" translation
@@ -167,6 +177,17 @@ export const genreMap = {
         adSupportedPlan: "Obtén nuestro plan más económico con anuncios.",
         learnMore: "Aprende más",
         trending: "Tendencias ahora",
+        signUp: "Regístrate",
+        email: "Correo electrónico",
+        username: "Nombre de usuario",
+        password: "Contraseña",
+        alreadyMember: "¿Ya eres miembro?",
+
+        newToNetflix: "¿Nuevo en Netflix?",
+        signUpNow: "Regístrate ahora.",
+        recaptchaNote: "Esta página no está protegida por Google reCAPTCHA para garantizar que no eres un robot.",
+        learnMore: "Aprende más.",
+        
         content: {
             Movies: "Películas",
             "TV Shows": "Programas de TV", // Added "TV Shows" translation
