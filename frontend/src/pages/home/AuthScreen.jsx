@@ -32,7 +32,11 @@ const AuthScreen = () => {
 
   {/*For the Language Selection */}
 
-  const [selectedLanguage, setSelectedLanguage] = useState("English"); // Default language
+  const { language } = useLanguageStore(); // Access current language
+  const { setLanguage } = useLanguageStore(); // Access current language
+  const t = translations[language]; // Get translations for the current language
+
+  const [selectedLanguage, setSelectedLanguage] = useState(language); // Default language
   const options = ["English", "Español"]; // Dropdown options
   const [isOpen1, setIsOpen1] = useState(false); // State for the top dropdown
   const [isOpen2, setIsOpen2] = useState(false); // State for the bottom dropdown
@@ -41,10 +45,6 @@ const AuthScreen = () => {
   
   const toggleDropdown1 = () => setIsOpen1((prev) => !prev); // Top dropdown toggle
   const toggleDropdown2 = () => setIsOpen2((prev) => !prev); // Bottom dropdown toggle
-  
-  const { language } = useLanguageStore(); // Access current language
-  const { setLanguage } = useLanguageStore(); // Access current language
-  const t = translations[language]; // Get translations for the current language
 
   const handleClickOutside = (event) => {
     // Close the top dropdown if clicked outside
