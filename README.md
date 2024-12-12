@@ -1,8 +1,12 @@
-# Netflix Clone Application
+<img width="925" alt="image" src="https://github.com/user-attachments/assets/84778cc2-a01a-4c94-ab1a-ae95d063b4ea" />
+
+# MERN Netflix Clone Application
 
 This project is a **Netflix-inspired application** designed to replicate key features of the popular streaming platform. It allows users to browse movies and TV shows, switch between languages and regions, and perform user authentication in an intuitive, responsive interface.
 
----
+
+## Access
+The Project is deployed at the Render.com and can be accessed at https://netflix-clone-fiz5.onrender.com/
 
 ## Features
 
@@ -14,17 +18,16 @@ This project is a **Netflix-inspired application** designed to replicate key fea
 - **FAQs and Help Section**: Detailed answers to common questions and features.
 - **Dynamic Genres and Categories**: Content is automatically categorized based on TMDB genres and APIs.
 
----
+
 
 ## Technologies Used
-
 ### **Frontend**
 - **React**: Component-based framework for building the user interface.
 - **Zustand**: Lightweight state management library for handling language preferences and content types.
 - **React Router**: For navigation and routing across pages.
 - **Axios**: For seamless API communication between the frontend and backend.
 - **Lucide React**: Icon library to enhance UI design.
-- **CSS/SCSS**: For styling components and ensuring a responsive layout.
+- **CSS/TailWind**: For styling components and ensuring a responsive layout.
 
 ### **Backend**
 - **Node.js**: Server-side runtime environment for JavaScript.
@@ -32,11 +35,11 @@ This project is a **Netflix-inspired application** designed to replicate key fea
 - **TMDB API**: External API for fetching movie and TV show data dynamically.
 - **Custom Utilities**: Helper functions for handling API requests and dynamic language switching.
 
-### **Database (Optional for Extended Functionality)**
-- **MongoDB**: For storing user data (e.g., authentication, preferences) if required in future implementations.
+### **Database**
+- **MongoDB**: For storing user data (e.g., authentication, search history).
+
 
 ---
-
 ## Project Structure
 
 ```plaintext
@@ -86,43 +89,29 @@ Endpoints used:
    ```
 
 2. **Set Up Backend**
-   ```bash
-   cd backend
-   npm install
-   ```
-   - Create a `.env` file in the `backend` directory with the following content:
-     ```env
-     TMDB_API_KEY=your_tmdb_api_key
-     PORT=5000
-     ```
-   - Start the backend server:
-     ```bash
-     npm start
-     ```
+- Create a `.env` file in the root directory with the following content:
+```env
+   PORT=5000
+   MONGO_URI=your_mongo_uri
+   NODE_ENV=development
+   JWT_SECRET=your_jwt_secre
+   TMDB_API_KEY=your_tmdb_api_key
+```
+- Build the application:
+  ```bash
+  npm run build
+  ```
+  
+- Start the application:
+  ```bash
+  npm run start
+  ```
 
-3. **Set Up Frontend**
-   ```bash
-   cd ../frontend
-   npm install
-   ```
-   - Start the development server:
-     ```bash
-     npm start
-     ```
-
-4. **Access the Application**
-   Open your browser and navigate to `http://localhost:3000`.
+3. **Access the Application**
+   Open your browser and navigate to `http://localhost:5000`.
 
 ---
 
-## Future Enhancements
-
-- **User Profiles**: Allow users to create and manage personalized profiles.
-- **Search Functionality**: Enable searching for specific movies or TV shows.
-- **Watchlist**: Allow users to save their favorite content.
-- **Advanced Filters**: Provide additional filters like genres, ratings, and release years.
-
----
 
 ## License
 
