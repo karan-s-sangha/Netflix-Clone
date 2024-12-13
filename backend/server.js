@@ -42,8 +42,8 @@ if (ENV_VARS.NODE_ENV === "production") {
     // Schedule a task to run every 5 minutes
     cron.schedule('*/14 * * * *', async () => {
         try {
-            //const response = await axios.get('https://your-app-domain.com/ping');
-			const response = await axios.get(`http://localhost:${PORT}/ping`);
+            const response = await axios.get('https://netflix-clone-fiz5.onrender.com/ping');
+			//const response = await axios.get(`http://localhost:${PORT}/ping`);
             console.log('Ping successful:', response.status);
         } catch (error) {
             console.error('Ping failed:', error.message);
