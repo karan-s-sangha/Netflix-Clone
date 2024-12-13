@@ -12,8 +12,8 @@ import searchRoutes from "./routes/search.route.js";
 import { ENV_VARS } from "./config/envVars.js"; // Environment variables
 import { connectDB } from "./config/db.js"; // Database connection
 import { protectRoute } from "./middleware/protectRoute.js"; // Authentication middleware
+import cron from "node-cron";
 
-const cron = import('node-cron');
 const app = express(); // Create Express app
 const PORT = ENV_VARS.PORT; // Get port from environment
 const __dirname = path.resolve(); // Get current directory path
