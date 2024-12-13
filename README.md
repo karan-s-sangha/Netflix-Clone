@@ -6,10 +6,9 @@ This project is a **Netflix-inspired application** designed to replicate key fea
 
 
 ## Access
-The Project is deployed at the Render.com and can be accessed at https://netflix-clone-fiz5.onrender.com/
+The project is deployed on Render.com and can be accessed at https://netflix-clone-fiz5.onrender.com/. Please note that it may take a moment to load as the server initializes.
 
 ## Features
-
 - **Movie and TV Show Browsing**: Discover trending, top-rated, and upcoming movies and TV shows dynamically fetched from the TMDB API.
 - **Multi-language Support**: Switch seamlessly between **English** and **Spanish** for a localized experience.
 - **Region-specific Content**: View tailored content for specific regions, such as **United States** or **Global**.
