@@ -6,7 +6,7 @@ This project is a **Netflix-inspired application** designed to replicate key fea
 
 
 ## Access
-The project is deployed on Render.com and can be accessed at https://netflix-clone-fiz5.onrender.com/. Please note that it may take a moment to load as the server initializes.
+The project is deployed on Render.com and can be accessed at https://netflix-clone-rzfu.onrender.com/. Please note that it may take a moment to load as the server initializes.
 
 ## Features
 - **Movie and TV Show Browsing**: Discover trending, top-rated, and upcoming movies and TV shows dynamically fetched from the TMDB API.
