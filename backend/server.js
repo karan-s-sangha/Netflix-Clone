@@ -1,7 +1,8 @@
-import express from "express"; // Framework for building the server
-import cookieParser from "cookie-parser"; // Middleware for parsing cookies
-import path from "path"; // Node.js module for handling file paths
-import axios from "axios"; // HTTP client for making requests
+import express from "express";
+import cookieParser from "cookie-parser";
+import path from "path";
+import axios from "axios";
+import cron from "node-cron";
 
 import authRoutes from "./routes/auth.route.js";
 import homeRoutes from "./routes/home.route.js";
@@ -9,17 +10,29 @@ import movieRoutes from "./routes/movie.route.js";
 import tvRoutes from "./routes/tv.route.js";
 import searchRoutes from "./routes/search.route.js";
 
-import { ENV_VARS } from "./config/envVars.js"; // Environment variables
-import { connectDB } from "./config/db.js"; // Database connection
-import { protectRoute } from "./middleware/protectRoute.js"; // Authentication middleware
-import cron from "node-cron";
+import { ENV_VARS } from "./config/envVars.js";
+import { connectDB } from "./config/db.js";
+import { protectRoute } from "./middleware/protectRoute.js";
 
-const app = express(); // Create Express app
-const PORT = ENV_VARS.PORT; // Get port from environment
-const __dirname = path.resolve(); // Get current directory path
+const app = express();
+const PORT = ENV_VARS.PORT;
+const __dirname = path.resolve();
 
-app.use(express.json()); // Middleware to parse JSON data
-app.use(cookieParser()); // Middleware to parse cookies
+app.use(express.json());
+app.use(cookieParser());
+
+let baseUrl = ""; // Initialize the base URL variable
+
+// Middleware to capture and set the base URL dynamically
+app.use((req, res, next) => {
+    if (!baseUrl) {
+        const protocol = req.protocol; // HTTP or HTTPS
+        const host = req.get('host'); // Hostname with port
+        baseUrl = `${protocol}://${host}`;
+        console.log(`Base URL set to: ${baseUrl}`);
+    }
+    next();
+});
 
 // Route handlers
 app.use("/api/v1/auth", authRoutes);
@@ -41,9 +54,13 @@ if (ENV_VARS.NODE_ENV === "production") {
 
     // Schedule a task to run every 5 minutes
     cron.schedule('*/14 * * * *', async () => {
+        if (!baseUrl) {
+            console.error("Base URL is not set. Cron job skipped.");
+            return;
+        }
+
         try {
-            const response = await axios.get('https://netflix-clone-fiz5.onrender.com/ping');
-			//const response = await axios.get(`http://localhost:${PORT}/ping`);
+            const response = await axios.get(`${baseUrl}/ping`);
             console.log('Ping successful:', response.status);
         } catch (error) {
             console.error('Ping failed:', error.message);
