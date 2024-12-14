@@ -232,7 +232,7 @@ const AuthScreen = () => {
         {/* Navbar Section */}
         <header className="max-w-full mx-0 md:mx-32 flex items-center justify-between p-5 pb-10">
           {/* Netflix logo displayed on the top-left */}
-          <img src="/netflix-logo.png" alt="Netflix Logo" className="h-12 w-auto" />
+          <img src="/netflix-logo.png" alt="Netflix Logo" className="h-28 w-auto" />
 
           {/* Buttons aligned side by side on the right */}
           <div className="flex items-center gap-4">
