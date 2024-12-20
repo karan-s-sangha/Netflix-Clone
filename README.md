@@ -83,7 +83,7 @@ Endpoints used:
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/yourusername/netflix-clone.git
+   git clone https://github.com/karan-s-sangha/netflix-clone.git
    cd netflix-clone
    ```
 
