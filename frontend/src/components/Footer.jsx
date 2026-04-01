@@ -34,7 +34,7 @@ const Footer = () => {
 						- `text-muted-foreground`: Custom class for muted text color (assumed to be defined elsewhere).
 						- `md:text-left`: Aligns text to the left on medium screens and above.
 					*/}
-					Built by{" "}
+					Educational project built by{" "}
 					<a
 						href="https://github.com/karan-s-sangha"
 						target="_blank"
@@ -42,7 +42,7 @@ const Footer = () => {
 					>
 						karan
 					</a>
-					. The source code is available on{" "}
+					. Source code on{" "}
 					<a
 						href="https://github.com/karan-s-sangha"
 						target="_blank"
@@ -51,7 +51,7 @@ const Footer = () => {
 					>
 						GitHub
 					</a>
-					.
+					. Not affiliated with Netflix, Inc.
 					{/* Hyperlinks to GitHub with underline styling */}
 					{/* Tailwind CSS Classes for links:
 						- `font-medium`: Applies medium font weight.
