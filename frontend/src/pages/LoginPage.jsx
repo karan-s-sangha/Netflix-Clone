@@ -25,6 +25,7 @@ const LoginPage = () => {
 	const t = translations[language]; // Get translations for the current language
 
 	return (
+		<>
 		<div className="w-full bg-yellow-400 text-black text-center text-sm font-semibold py-2 px-4">
 			⚠️ This is an educational project built for learning purposes only. It is <strong>not affiliated with, endorsed by, or associated with Netflix, Inc.</strong> in any way.
 		</div>
@@ -171,6 +172,7 @@ const LoginPage = () => {
 				</div>
 			</div>
 		</div>
+		</>
 	);
 };
 
